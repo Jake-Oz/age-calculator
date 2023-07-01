@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, AnimationEvent } from "react";
 import { Inputs } from "./DateEntry";
 import { intervalToDuration } from "date-fns";
+import { handleClientScriptLoad } from "next/script";
 
 interface OutputProps {
   data: Inputs;
@@ -28,7 +29,7 @@ const Output: React.FC<OutputProps> = ({ data }) => {
     }
   }, [data]);
 
-  onanimationend = (event) => {
+  const handleAnimationEvent = (e: AnimationEvent<HTMLDivElement>) => {
     setIsNewData(false);
   };
 
@@ -43,7 +44,9 @@ const Output: React.FC<OutputProps> = ({ data }) => {
   return (
     <div className="flex flex-col mb-10">
       <div className="mb-4 grid grid-cols-3 h-11 desktop:h-24">
-        <div className={animateClass}>{years ? years : "- - "}</div>
+        <div onAnimationEnd={handleAnimationEvent} className={animateClass}>
+          {years ? years : "- - "}
+        </div>
         <div className="text-offBlack italic font-extrabold text-5xl desktop:text-8xl col-span-2">
           {" "}
           year<span>{years && years < 2 ? "" : "s"}</span>
